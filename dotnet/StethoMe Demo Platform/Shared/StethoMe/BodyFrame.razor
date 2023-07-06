@@ -1,0 +1,87 @@
+﻿@inject IJSRuntime JS
+
+<section class="h-25">
+    @if (_iframeSrc == null)
+    {
+        <p>
+            <em>Loading body frame...</em>
+        </p>
+    }
+    else
+    {
+        <p class="@(_iframeLoaded ? "d-none" : "")">
+            <em>Loading body frame...</em>
+        </p>
+        <iframe
+            class="@(_iframeLoaded ? "w-100 h-100" : "d-none")"
+            @ref="_iframe"
+            scrolling="no"
+            frameBorder="0"
+            allowtransparency="true"
+            importance="high"
+            src="@_iframeSrc"
+            @onload="() => _iframeLoaded = true"
+        ></iframe>
+    }
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public string ClientToken { get; set; } = null!;
+    
+    [Parameter, EditorRequired]
+    public string VisitId { get; set; } = null!;
+
+    [Parameter]
+    public int Point { get; set; } = -1;
+    
+    [Parameter]
+    public string Language { get; set; } = "en";
+    
+    [Parameter]
+    public int Details { get; set; } = 2;
+    
+    [Parameter]
+    public EventCallback<int> OnPointSelected { get; set; }
+
+    [JSInvokable("OnPointSelectedJS")]
+    public async Task OnPublicSelectedJS(int point)
+    {
+        await OnPointSelected.InvokeAsync(point);
+    }
+
+    private ElementReference _iframe;
+    private bool _iframeLoaded = false;
+    private string? _iframeSrc = null;
+
+    private IJSObjectReference _jsModule = null!;
+    private DotNetObjectReference<BodyFrame> _dotNetRef = null!; 
+    
+    protected override void OnInitialized()
+    {
+        _dotNetRef = DotNetObjectReference.Create(this);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _iframeSrc = $"https://dev.media-api.stethome.com/v2/pulmonary/frame-body/{VisitId}/{Point}/{Language}?details={Details}&bearer={ClientToken}";
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+        
+        _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./Shared/StethoMe/BodyFrame.razor.js");
+        
+        await _jsModule.InvokeVoidAsync("SetupFrame", _iframe, DotNetObjectReference.Create(this));
+    }
+
+    public void Dispose()
+    {
+        _dotNetRef.Dispose();
+    }
+
+}

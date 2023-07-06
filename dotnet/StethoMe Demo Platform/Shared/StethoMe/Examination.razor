@@ -1,0 +1,44 @@
+﻿<main class="container-fluid h-100 overflow-hidden">
+    <BodyFrame
+        ClientToken="@ClientToken"
+        VisitId="@VisitId"
+        Point="@((int) InitialPoint)"
+        OnPointSelected="point => CurrentPoint = point"
+    />
+    @if (CurrentPoint < 1 && InitialPoint == PointSelection.Manual)
+    {
+        <p>
+            <em>Please select point on the body frame</em>
+        </p>
+    }
+    else if (CurrentPoint < 1)
+    {
+        <p>
+            <em>Waiting for body frame...</em>
+        </p>        
+    }
+    else
+    {
+        <PlayerFrame
+            ClientToken="@ClientToken"
+            VisitId="@VisitId"
+            Point="@CurrentPoint"
+        />
+    }
+</main>
+
+@code {
+    [Parameter, EditorRequired]
+    public string ClientToken { get; set; } = null!;
+
+    public string VisitId = "e61bebe693ae350592e2fcf6dbfb8dc8";
+
+    public enum PointSelection: int
+    {
+        Manual = 0,
+        Auto = -1,
+    }
+    
+    public const PointSelection InitialPoint = PointSelection.Auto;
+    public int CurrentPoint = (int) InitialPoint;
+}

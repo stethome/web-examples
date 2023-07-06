@@ -1,0 +1,31 @@
+﻿@page "/media-api"
+@using StethoMe_Demo_Platform.Data
+@using StethoMe_Demo_Platform.Data.StethoMe
+@inject WeatherForecastService ForecastService
+@inject MediaApiService MediaApiService
+
+<PageTitle>StethoMe Media API</PageTitle>
+
+<h1>Media API</h1>
+
+@if (_clientToken == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <Examination ClientToken="@_clientToken" />
+}
+
+@code {
+    private string? _clientToken;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = (await MediaApiService.GetClientToken());
+
+        _clientToken = response.Token;
+    }
+}

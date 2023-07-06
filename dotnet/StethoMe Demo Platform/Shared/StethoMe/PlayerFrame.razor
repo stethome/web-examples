@@ -1,0 +1,72 @@
+﻿@inject IJSRuntime JS
+
+<section class="h-75">
+    @if (_iframeSrc == null)
+    {
+        <p>
+            <em>Loading player frame...</em>
+        </p>
+    }
+    else
+    {
+        <p class="@(_iframeLoaded ? "d-none" : "")">
+            <em>Loading player frame...</em>
+        </p>
+        <iframe
+            class="@(_iframeLoaded ? "w-100 h-100" : "d-none")"
+            scrolling="no"
+            frameBorder="0"
+            allowtransparency="true"
+            importance="high"
+            src="@_iframeSrc"
+            @onload="() => _iframeLoaded = true"
+        ></iframe>
+    }
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public string ClientToken { get; set; } = null!;
+    
+    [Parameter, EditorRequired]
+    public string VisitId { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public int Point { get; set; }
+    
+    [Parameter]
+    public string Language { get; set; } = "en";
+    
+    [Parameter]
+    public int Details { get; set; } = 2;
+    
+    private string? _iframeSrc = null;
+    private bool _iframeLoaded = false;
+    
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("OnInitialized");
+        
+        UpdateIframeSrc();
+    }
+
+    private bool UpdateIframeSrc()
+    {
+        var newSrc = $"https://dev.media-api.stethome.com/v2/pulmonary/frame/{VisitId}/{Point}/{Language}?details={Details}&bearer={ClientToken}";
+        var hasChanged = _iframeSrc != newSrc;
+        _iframeSrc = newSrc;
+
+        return hasChanged;
+    }
+
+    protected override void OnParametersSet()
+    {
+        Console.WriteLine("OnParametersSet");
+
+        if (UpdateIframeSrc())
+        {
+            _iframeLoaded = false;
+        }
+    }
+
+}
