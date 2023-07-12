@@ -10,3 +10,6 @@ api_platform:
             vary: ['Content-Type', 'Authorization', 'Origin']
         extra_properties:
             standard_put: true
+    # ApiResource folders in modules will be automatically mapped in Kernel build
+    mapping:
+        paths: ~
