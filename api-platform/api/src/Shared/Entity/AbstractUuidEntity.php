@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
 abstract class AbstractUuidEntity
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'uuid', type: UuidType::NAME)]
+    #[ORM\Column(name: 'uuid', type: UuidType::NAME, unique: true)]
     protected Uuid $uuid;
 
     #[ORM\Column(name: 'created_at', type: Types::DATETIMETZ_IMMUTABLE, nullable: false)]
