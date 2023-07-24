@@ -17,14 +17,22 @@ final readonly class UserProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?UserModel
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): UserModel|\Generator|null
     {
         if ($operation instanceof CollectionOperationInterface) {
-            throw new \Exception('Not implemented');
+            // @todo filters, pagination
+            return $this->provideCollection();
         }
 
         $user = $this->repository->find($uriVariables['id']);
 
         return $user ? UserModel::fromSecurityUser($user) : null;
+    }
+
+    private function provideCollection(): \Generator
+    {
+        foreach ($this->repository->findAll() as $user) {
+            yield UserModel::fromSecurityUser($user);
+        }
     }
 }
