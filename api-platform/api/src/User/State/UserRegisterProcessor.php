@@ -4,24 +4,21 @@ namespace App\User\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use App\Shared\Service\OrmProcessor;
 use App\User\ApiResource\UserModel;
 use App\User\Dto\UserRegisterDto;
 use App\User\Entity\SecurityUser;
 use App\User\Entity\UserData;
+use App\User\Repository\SecurityUserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 use Symfony\Component\Uid\Factory\UuidFactory;
 
-final class UserRegisterProcessor extends OrmProcessor
+final readonly class UserRegisterProcessor implements ProcessorInterface
 {
     public function __construct(
-        ProcessorInterface $persistProcessor,
-        ProcessorInterface $removeProcessor,
-        UuidFactory $uuidFactory,
-        private readonly UserPasswordHasherInterface $passwordHasher,
+        private UuidFactory $uuidFactory,
+        private UserPasswordHasherInterface $passwordHasher,
+        private SecurityUserRepository $repository,
     ) {
-        parent::__construct($persistProcessor, $removeProcessor, $uuidFactory);
     }
 
     /**
@@ -46,7 +43,7 @@ final class UserRegisterProcessor extends OrmProcessor
             $data->password,
         ));
 
-        $this->persistProcessor->process($securityUser, $operation, $uriVariables, $context);
+        $this->repository->save($securityUser, true);
 
         return UserModel::fromSecurityUser($securityUser);
     }

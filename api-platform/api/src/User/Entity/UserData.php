@@ -32,7 +32,6 @@ class UserData extends AbstractUuidEntity
         $this->surname = $surname;
     }
 
-
     public function getName(): string
     {
         return $this->name;
