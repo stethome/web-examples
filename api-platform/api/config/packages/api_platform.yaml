@@ -5,6 +5,7 @@ api_platform:
     mercure: ~
     # Good cache defaults for REST APIs
     defaults:
+        route_prefix: /api
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
