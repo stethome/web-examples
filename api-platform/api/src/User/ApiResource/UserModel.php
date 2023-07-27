@@ -10,22 +10,28 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Shared\Security\Enum\IsGranted;
+use App\User\Controller\GetCurrentUser;
 use App\User\Dto\UserRegisterDto;
 use App\User\Entity\SecurityUser;
+use App\User\State\CurrentUserProvider;
 use App\User\State\UserProvider;
 use App\User\State\UserRegisterProcessor;
 use Symfony\Component\Uid\Uuid;
 
 #[Post(
+    uriTemplate: '/register',
     input: UserRegisterDto::class,
     processor: UserRegisterProcessor::class,
 )]
 #[Get(
     uriVariables: ['uuid'],
+    security: IsGranted::Admin->value.' or object.uuid == user.getUuid()',
     provider: UserProvider::class,
     stateOptions: new Options(SecurityUser::class),
 )]
 #[GetCollection(
+    security: IsGranted::Admin->value,
     provider: UserProvider::class,
     stateOptions: new Options(SecurityUser::class)
 )]

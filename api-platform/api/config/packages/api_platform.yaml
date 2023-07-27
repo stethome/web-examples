@@ -14,3 +14,9 @@ api_platform:
     # ApiResource folders in modules will be automatically mapped in Kernel build
     mapping:
         paths: ~
+    # Swagger Web UI configuration
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header

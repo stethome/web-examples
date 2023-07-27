@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace App\User\Entity;
 
 use App\Shared\Entity\AbstractUuidEntity;
+use App\Shared\Security\Enum\Role;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'security_users')]
-class SecurityUser extends AbstractUuidEntity implements PasswordAuthenticatedUserInterface
+class SecurityUser extends AbstractUuidEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(name: 'email', type: Types::STRING, unique: true, nullable: false)]
     protected string $email;
@@ -63,5 +65,20 @@ class SecurityUser extends AbstractUuidEntity implements PasswordAuthenticatedUs
     public function setUserData(UserData $userData): void
     {
         $this->userData = $userData;
+    }
+
+    public function getRoles(): array
+    {
+        return [Role::User->value];
+    }
+
+    public function eraseCredentials(): void
+    {
+        // intentionally empty, nothing to erase
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->getEmail();
     }
 }
