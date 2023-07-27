@@ -16,7 +16,10 @@ use App\User\State\UserProvider;
 use App\User\State\UserRegisterProcessor;
 use Symfony\Component\Uid\Uuid;
 
-#[Post(input: UserRegisterDto::class, processor: UserRegisterProcessor::class)]
+#[Post(
+    input: UserRegisterDto::class,
+    processor: UserRegisterProcessor::class,
+)]
 #[Get(
     uriVariables: ['uuid'],
     provider: UserProvider::class,
@@ -26,7 +29,10 @@ use Symfony\Component\Uid\Uuid;
     provider: UserProvider::class,
     stateOptions: new Options(SecurityUser::class)
 )]
-#[ApiFilter(SearchFilter::class, properties: ['email' => 'partial'])]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: ['email' => 'partial'],
+)]
 class UserModel
 {
     public Uuid $uuid;
