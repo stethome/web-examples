@@ -9,7 +9,6 @@ use App\User\ApiResource\UserModel;
 use App\User\Entity\SecurityUser;
 use App\User\Entity\UserData;
 use Symfony\Component\Uid\Factory\UuidFactory;
-use Symfony\Component\Uid\Uuid;
 
 class AuthenticationScenarioTest extends ApiTestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Service\State;
+namespace App\Exam\Service\State;
 
 use ApiPlatform\Doctrine\Orm\Paginator;
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
@@ -12,12 +12,12 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\PaginatorInterface;
 use ApiPlatform\State\Pagination\TraversablePaginator;
 use ApiPlatform\State\ProviderInterface;
-use App\User\ApiResource\UserModel;
+use App\Exam\ApiResource\ExamModel;
 
 /**
- * @implements ProviderInterface<UserModel>
+ * @implements ProviderInterface<ExamModel>
  */
-final readonly class UserProvider implements ProviderInterface
+final readonly class ExamProvider implements ProviderInterface
 {
     public function __construct(
         private ItemProvider $itemProvider,
@@ -25,7 +25,7 @@ final readonly class UserProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): UserModel|PaginatorInterface|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ExamModel|PaginatorInterface|null
     {
         if ($operation instanceof CollectionOperationInterface) {
             return $this->provideCollection($operation, $uriVariables, $context);
@@ -47,17 +47,17 @@ final readonly class UserProvider implements ProviderInterface
         );
     }
 
-    private function provideItem(Operation $operation, array $uriVariables, array $context): ?UserModel
+    private function provideItem(Operation $operation, array $uriVariables, array $context): ?ExamModel
     {
-        $user = $this->itemProvider->provide($operation, $uriVariables, $context);
+        $exam = $this->itemProvider->provide($operation, $uriVariables, $context);
 
-        return $user ? UserModel::fromSecurityUser($user) : null;
+        return $exam ? ExamModel::fromExam($exam) : null;
     }
 
     private function mapPaginator(Paginator $paginator): \Generator
     {
         foreach ($paginator as $item) {
-            yield UserModel::fromSecurityUser($item);
+            yield ExamModel::fromExam($item);
         }
     }
 }

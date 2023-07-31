@@ -7,6 +7,8 @@ namespace App\User\ApiResource;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -17,6 +19,8 @@ use App\User\Service\State\UserProvider;
 use App\User\Service\State\UserRegisterProcessor;
 use Symfony\Component\Uid\Uuid;
 
+#[ApiResource(stateOptions: new Options(SecurityUser::class))]
+#[ApiFilter(SearchFilter::class, properties: ['email' => 'partial'])]
 #[Post(
     uriTemplate: '/register',
     input: UserRegisterDto::class,
@@ -26,19 +30,15 @@ use Symfony\Component\Uid\Uuid;
     uriVariables: ['uuid'],
     security: IsGranted::Admin->value.' or object.uuid == user.getUuid()',
     provider: UserProvider::class,
-    stateOptions: new Options(SecurityUser::class),
 )]
 #[GetCollection(
     security: IsGranted::Admin->value,
     provider: UserProvider::class,
     stateOptions: new Options(SecurityUser::class)
 )]
-#[ApiFilter(
-    SearchFilter::class,
-    properties: ['email' => 'partial'],
-)]
 class UserModel
 {
+    #[ApiProperty(identifier: true)]
     public Uuid $uuid;
     public string $email;
     public string $name;
