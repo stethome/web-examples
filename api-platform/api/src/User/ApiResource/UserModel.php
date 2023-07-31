@@ -11,12 +11,10 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Shared\Security\Enum\IsGranted;
-use App\User\Controller\GetCurrentUser;
 use App\User\Dto\UserRegisterDto;
 use App\User\Entity\SecurityUser;
-use App\User\State\CurrentUserProvider;
-use App\User\State\UserProvider;
-use App\User\State\UserRegisterProcessor;
+use App\User\Service\State\UserProvider;
+use App\User\Service\State\UserRegisterProcessor;
 use Symfony\Component\Uid\Uuid;
 
 #[Post(

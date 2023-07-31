@@ -6,6 +6,7 @@ namespace App\User\Entity;
 
 use App\Shared\Entity\AbstractUuidEntity;
 use App\Shared\Security\Enum\Role;
+use App\User\Service\AppUserInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'security_users')]
-class SecurityUser extends AbstractUuidEntity implements UserInterface, PasswordAuthenticatedUserInterface
+class SecurityUser extends AbstractUuidEntity implements UserInterface, PasswordAuthenticatedUserInterface, AppUserInterface
 {
     #[ORM\Column(name: 'email', type: Types::STRING, unique: true, nullable: false)]
     protected string $email;

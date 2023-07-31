@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\functional\User\State;
+namespace App\Tests\functional\User\Service\State;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\User\ApiResource\UserModel;
@@ -11,7 +11,7 @@ class UserRegisterProcessorTest extends ApiTestCase
 {
     public function testRegisterUser(): void
     {
-        self::createClient()->request('POST', '/user_models', ['json' => [
+        self::createClient()->request('POST', '/api/register', ['json' => [
             'email' => 'user@stethome.com',
             'name' => 'John',
             'surname' => 'Doe',

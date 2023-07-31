@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\State;
+namespace App\User\Service\State;
 
 use ApiPlatform\Doctrine\Orm\Paginator;
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
