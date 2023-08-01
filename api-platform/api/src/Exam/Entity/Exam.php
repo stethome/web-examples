@@ -14,11 +14,12 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Table('exams')]
 class Exam extends AbstractUuidEntity
 {
-    public function __construct(Uuid $uuid, string $externalId, UserData $owner)
+    public function __construct(Uuid $uuid, string $externalId, UserData $owner, \DateTimeImmutable $examinedAt)
     {
         parent::__construct($uuid);
         $this->externalId = $externalId;
         $this->owner = $owner;
+        $this->examinedAt = $examinedAt;
     }
 
     #[ORM\Column(name: 'external_id', type: Types::STRING, length: 32)]
@@ -28,6 +29,9 @@ class Exam extends AbstractUuidEntity
     #[ORM\JoinColumn(name: 'owner', referencedColumnName: 'uuid', nullable: false)]
     protected UserData $owner;
 
+    #[ORM\Column(name: 'examined_at', type: Types::DATETIMETZ_IMMUTABLE, nullable: false)]
+    protected \DateTimeImmutable $examinedAt;
+
     public function getExternalId(): string
     {
         return $this->externalId;
@@ -36,5 +40,10 @@ class Exam extends AbstractUuidEntity
     public function getOwner(): UserData
     {
         return $this->owner;
+    }
+
+    public function getExaminedAt(): \DateTimeImmutable
+    {
+        return $this->examinedAt;
     }
 }

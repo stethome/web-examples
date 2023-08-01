@@ -34,9 +34,13 @@ class ExamModel
     #[Groups('read')]
     public Uuid $uuid;
 
+    #[ApiProperty(example: 'e61bebe693ae350592e2fcf6dbfb8dc8')]
     #[StethoMeId]
     #[Groups(['read', 'write'])]
     public string $externalId;
+
+    #[Groups('read')]
+    public \DateTimeImmutable $examinatedAt;
 
     public static function fromExam(Exam $exam): ExamModel
     {
@@ -44,6 +48,7 @@ class ExamModel
 
         $self->uuid = $exam->getUuid();
         $self->externalId = $exam->getExternalId();
+        $self->examinatedAt = $exam->getExaminedAt();
 
         return $self;
     }
