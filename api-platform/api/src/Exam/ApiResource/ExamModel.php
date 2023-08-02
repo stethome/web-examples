@@ -40,7 +40,7 @@ class ExamModel
     public string $externalId;
 
     #[Groups('read')]
-    public \DateTimeImmutable $examinatedAt;
+    public \DateTimeImmutable $examinedAt;
 
     public static function fromExam(Exam $exam): ExamModel
     {
@@ -48,7 +48,7 @@ class ExamModel
 
         $self->uuid = $exam->getUuid();
         $self->externalId = $exam->getExternalId();
-        $self->examinatedAt = $exam->getExaminedAt();
+        $self->examinedAt = $exam->getExaminedAt();
 
         return $self;
     }
