@@ -16,7 +16,9 @@ log
             '*.json*', '*.html', '*.csv', '*.yml', '*.yaml', '*.xml'
         )
     )
-    || path('/favicon.ico', '/manifest.json', '/robots.txt', '/_next*', '/sitemap*')`
+    || path('/favicon.ico', '/manifest.json', '/robots.txt', '/_next*', '/__next*', '/sitemap*')
+    || path('/api/auth/session', '/api/auth/csrf', '/api/auth/_log', '/api/auth/signout', '/api/auth/signin')
+`
 
 route {
     root * /srv/app/public
