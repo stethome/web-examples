@@ -1,12 +1,12 @@
 import {fetch, FetchResponse} from "../../../utils/dataAccess";
 import CredentialsProvider from "next-auth/providers/credentials"
-import NextAuth, {AuthOptions, Session, User} from "next-auth";
-import {JWT} from "next-auth/jwt";
+import NextAuth, {AuthOptions, User} from "next-auth";
 import {NextApiRequest, NextApiResponse} from "next";
-import {LoginCredentials, LoginTokenResponse} from "../../../types/auth";
-import {CredentialInput} from "next-auth/src/providers/credentials";
+import {LoginTokenResponse} from "../../../types/auth";
+import jwtDecode from "jwt-decode";
 
-const options: AuthOptions = {
+export const options: AuthOptions = {
+  session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -28,43 +28,41 @@ const options: AuthOptions = {
           },
         });
 
+        console.log("---------- authorize", email)
+
         const user = response as FetchResponse<LoginTokenResponse>;
 
         return {
           id: email,
-          jwt: user.data
-        };
+          email,
+          apiToken: user.data.token,
+        } as User;
       },
     })
   ],
-  // callbacks: {
-  //   async jwt(token: JWT, user: User) {
-  //     console.log('jwt', token, user);
-  //     if (user) {
-  //       token.user = user;
-  //     }
-  //
-  //     // token is valid
-  //     if (new Date() < new Date(token.user.exp)) {
-  //       return token;
-  //     }
-  //
-  //     // token has expired: force user to login again
-  //     // todo implement refresh token
-  //     return null;
-  //   },
-  //   async session(session: Session, token: JWT) {
-  //     console.log('session', token, session);
-  //     if (token) {
-  //       session.token = token;
-  //     }
-  //     if (token.user) {
-  //       session.user = token.user;
-  //     }
-  //
-  //     return session;
-  //   },
-  // },
+  callbacks: {
+    async session({ session, token }) {
+      if (token.user) {
+        session.user = token.user;
+      }
+
+      return session
+    },
+    async jwt({ token, user, account }) {
+      if (user) {
+        token.user = user;
+      }
+
+      // apiToken is expired, force login
+      const apiToken = jwtDecode(token.user.apiToken) as { exp: number };
+      if (new Date() > new Date(apiToken.exp * 1000)) {
+        console.error('api token is expired', apiToken)
+        // @todo logout
+      }
+
+      return token
+    },
+  },
 }
 
 const auth = (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options);
