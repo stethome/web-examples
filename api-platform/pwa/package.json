@@ -17,6 +17,7 @@
     "isomorphic-unfetch": "^3.1.0",
     "jwt-decode": "^3.1.2",
     "next": "^13.2.1",
+    "next-auth": "^4.22.3",
     "postcss": "^8.4.21",
     "react": "^18.2.0",
     "react-admin": "^4.12.3",

@@ -17,7 +17,6 @@ const RegisterForm = () => {
           method: 'POST',
           body: JSON.stringify(values),
         })
-          // .then(() => router.push('/app/login'))
           .catch(error => {
             formik.setStatus({
               isValid: false,
@@ -27,6 +26,7 @@ const RegisterForm = () => {
               formik.setErrors(error.fields);
             }
           })
+          .then(() => window.location.href = '/app/')
     },
   });
 

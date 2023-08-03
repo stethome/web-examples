@@ -1,12 +1,7 @@
 import jwtDecode from "jwt-decode";
 import { ENTRYPOINT } from "../../config/entrypoint";
-import {AuthModel} from "../../types/auth";
+import {AuthModel, LoginCredentials} from "../../types/auth";
 import {AuthProvider} from "react-admin";
-
-interface LoginCredentials {
-  username: string;
-  password: string
-}
 
 export const ADMIN_TOKEN = 'admin_token';
 
