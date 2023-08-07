@@ -11,6 +11,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class StethoMeApiClient
 {
     private readonly HttpClientInterface $client;
+    private readonly HttpClientInterface $clientMedia;
 
     private int $clientTokenValidUntil = 0;
     private string $clientToken = '';
@@ -18,10 +19,16 @@ final class StethoMeApiClient
     public function __construct(
         HttpClientInterface $client,
         #[Autowire('%stethome.api.url%')] string $url,
+        #[Autowire('%stethome.api.media_url%')] string $urlMedia,
         #[Autowire('%stethome.api.token%')] string $token,
     ) {
         $this->client = $client->withOptions([
             'base_uri' => $url,
+            'auth_bearer' => $token,
+        ]);
+
+        $this->clientMedia = $client->withOptions([
+            'base_uri' => $urlMedia,
             'auth_bearer' => $token,
         ]);
     }
@@ -34,10 +41,16 @@ final class StethoMeApiClient
         return $payload;
     }
 
-    /** Get short lived client token. */
+    /** Get short-lived client token. */
     public function getClientToken(): ResponseInterface
     {
         return $this->client->request('GET', '/v2/token');
+    }
+
+    /** Get short-lived client token for Media API IFrames. */
+    public function getClientMediaToken(string $examId): ResponseInterface
+    {
+        return $this->clientMedia->request('GET', '/v2/security/token');
     }
 
     public function getExam(string $examId): ResponseInterface
