@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     stethome.api.url: '%env(STETHOME_API_URL)%)'
-    stethome.api.media_url: '%env(STETHOME_API_MEDIA_URL)%)'
+    stethome.api.media_url: '%env(STETHOME_API_MEDIA_URL)%'
     stethome.api.token: '%env(STETHOME_API_TOKEN)%'
 
 services:

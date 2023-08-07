@@ -25,6 +25,7 @@ use App\Exam\Service\State\ExamMediaApiTokenProvider;
 final readonly class MediaApiTokenModel
 {
     public function __construct(
+        public string $mediaUrl,
         public string $token,
     ) {
     }

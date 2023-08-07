@@ -10,6 +10,7 @@ use ApiPlatform\State\ProviderInterface;
 use App\Exam\ApiResource\MediaApiTokenModel;
 use App\Exam\Entity\Exam;
 use App\Exam\Service\Client\StethoMeApiClient;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @implements ProviderInterface<MediaApiTokenModel>
@@ -17,6 +18,7 @@ use App\Exam\Service\Client\StethoMeApiClient;
 final readonly class ExamMediaApiTokenProvider implements ProviderInterface
 {
     public function __construct(
+        #[Autowire('%stethome.api.media_url%')] private string $urlMedia,
         private ItemProvider $itemProvider,
         private StethoMeApiClient $client,
     ) {
@@ -32,6 +34,9 @@ final readonly class ExamMediaApiTokenProvider implements ProviderInterface
 
         $response = $this->client->getClientMediaToken($exam->getExternalId());
 
-        return new MediaApiTokenModel($response->toArray()['token']);
+        return new MediaApiTokenModel(
+            $this->urlMedia,
+            $response->toArray()['token'],
+        );
     }
 }
