@@ -6,5 +6,4 @@ namespace App\Tests\functional\Exam\ApiResource;
 
 class ExamModelTest
 {
-
 }
