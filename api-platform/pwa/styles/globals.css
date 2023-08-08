@@ -8,7 +8,15 @@
     }
 
     a {
-        @apply no-underline text-cyan-700;
+        @apply no-underline;
+    }
+
+    body {
+        @apply h-screen
+    }
+
+    #__next {
+        @apply flex flex-col h-full
     }
 }
 

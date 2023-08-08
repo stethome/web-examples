@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import adminPicture from "../public/api-platform/admin.svg";
 import rocketPicture from "../public/api-platform/rocket.svg";
+import stethomePicture from "../public/stethome.svg"
 import logo from "../public/api-platform/logo_api-platform.svg";
 import mercurePicture from "../public/api-platform/mercure.svg";
 import logoTilleuls from "../public/api-platform/logo_tilleuls.svg";
@@ -106,6 +107,7 @@ const Welcome = () => (
               title="Mercure debugger"
               url="/.well-known/mercure/ui/"
             />
+            <Card image={stethomePicture} title="Application" url="/app" />
           </div>
         </div>
       </div>

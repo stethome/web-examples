@@ -21,6 +21,7 @@ RUN corepack enable && \
 FROM builder_base AS deps
 
 COPY --link pnpm-lock.yaml ./
+COPY --link patches/ ./patches/
 RUN pnpm fetch
 
 COPY --link . .
@@ -48,8 +49,7 @@ FROM node:18-alpine AS prod
 WORKDIR /srv/app
 
 ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
