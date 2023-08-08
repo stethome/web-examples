@@ -1,6 +1,4 @@
-import {fetch, FetchResponse} from "../../../utils/dataAccess";
 import {ExamModel} from "../../../types/ExamModel";
-import {useSession} from "next-auth/react";
 import Link from "next/link";
 
 const ExamList = ({ exams }: { exams: ExamModel[] }) => {
@@ -17,7 +15,7 @@ const ExamList = ({ exams }: { exams: ExamModel[] }) => {
       {exams.map(exam => (
         <tr key={exam.externalId}>
           <td className="border-2">
-            <Link href={`/app/exams/${exam.externalId}`}>{exam.externalId}</Link>
+            <Link href={`/app/exams/${exam.uuid}`} className="font-bold hover:underline">{exam.uuid}</Link>
           </td>
           <td className="border-2">{exam.examinedAt}</td>
         </tr>

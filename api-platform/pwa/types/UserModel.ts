@@ -5,7 +5,7 @@ export class UserModel implements Item {
 
   constructor(
     _id: string,
-    public uuid: any,
+    public uuid: string,
     public email: string,
     public name: string,
     public surname: string

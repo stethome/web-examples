@@ -5,6 +5,7 @@ export class ExamModel implements Item {
 
   constructor(
     _id: string,
+    public uuid: string,
     public externalId: string,
     public examinedAt: string,
   ) {

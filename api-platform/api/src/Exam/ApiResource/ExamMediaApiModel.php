@@ -16,17 +16,18 @@ use App\Exam\Service\State\ExamMediaApiTokenProvider;
         new Get(
             uriTemplate: '/exam_models/{uuid}/token',
             uriVariables: ['uuid'],
-            output: MediaApiTokenModel::class,
+            output: ExamMediaApiModel::class,
             provider: ExamMediaApiTokenProvider::class,
         ),
     ],
     stateOptions: new Options(Exam::class),
 )]
-final readonly class MediaApiTokenModel
+final readonly class ExamMediaApiModel
 {
     public function __construct(
         public string $mediaUrl,
         public string $token,
+        public string $externalId,
     ) {
     }
 }
