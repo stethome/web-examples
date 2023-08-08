@@ -21,6 +21,7 @@ RUN corepack enable && \
 FROM builder_base AS deps
 
 COPY --link pnpm-lock.yaml ./
+COPY --link patches/ ./patches/
 RUN pnpm fetch
 
 COPY --link . .
